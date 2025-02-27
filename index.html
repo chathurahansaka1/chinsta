@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Insta Downloader Pro</title>
+    <title>Ch Insta Downloader Pro</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         * {
@@ -39,14 +39,22 @@
             100% { border-color: #0080ff; }
         }
 
-        h1 {
+        .header {
             text-align: center;
             margin-bottom: 1.5rem;
-            position: relative;
+        }
+
+        h1 {
             font-size: 2rem;
             background: linear-gradient(45deg, #0080ff, #ff00ff);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            color: #888;
+            font-size: 0.9rem;
         }
 
         .input-group {
@@ -130,6 +138,29 @@
             text-align: center;
         }
 
+        .video-info {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin: 1rem 0;
+            padding: 1rem;
+            background: #1a1a1a;
+            border-radius: 8px;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            color: #ccc;
+        }
+
+        .info-item i {
+            color: #0080ff;
+            min-width: 20px;
+        }
+
         .video-preview {
             width: 100%;
             max-width: 400px;
@@ -156,6 +187,11 @@
             text-align: center;
         }
 
+        .next-btn {
+            margin-top: 1rem;
+            background: linear-gradient(135deg, #ff00ff, #0080ff);
+        }
+
         @media (max-width: 768px) {
             .container {
                 padding: 1.5rem;
@@ -165,19 +201,19 @@
                 font-size: 1.5rem;
             }
 
-            input {
-                font-size: 14px;
-            }
-
-            button {
-                font-size: 16px;
+            .video-info {
+                grid-template-columns: 1fr;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Instagram Reel Downloader</h1>
+        <div class="header">
+            <h1>Ch Insta Downloader</h1>
+            <div class="subtitle">By Chathura | Free Reel Downloader</div>
+        </div>
+        
         <div class="input-group">
             <input type="text" id="urlInput" placeholder="Paste Instagram Reel Link">
             <i class="fab fa-instagram instagram-icon"></i>
@@ -219,6 +255,24 @@
                 
                 if(data.url) {
                     resultDiv.innerHTML = `
+                        <div class="video-info">
+                            <div class="info-item">
+                                <i class="fas fa-eye"></i>
+                                ${data.views || 'N/A'}
+                            </div>
+                            <div class="info-item">
+                                <i class="fas fa-heart"></i>
+                                ${data.likes || 'N/A'}
+                            </div>
+                            <div class="info-item">
+                                <i class="fas fa-calendar"></i>
+                                ${data.date || 'N/A'}
+                            </div>
+                            <div class="info-item">
+                                <i class="fas fa-share"></i>
+                                ${data.shares || 'N/A'}
+                            </div>
+                        </div>
                         <video class="video-preview" controls>
                             <source src="${data.url}" type="video/mp4">
                             Your browser does not support the video tag.
@@ -226,6 +280,7 @@
                         <a href="${data.url}" download class="download-btn">
                             <button>Download Now ${data.size ? `(${data.size})` : ''}</button>
                         </a>
+                        <button class="next-btn" onclick="nextVideo()">Next Video</button>
                     `;
                 } else {
                     showError('Video not found. Please check the link');
@@ -236,6 +291,15 @@
             } finally {
                 loader.style.display = 'none';
             }
+        }
+
+        function nextVideo() {
+            const urlInput = document.getElementById('urlInput');
+            const resultDiv = document.getElementById('result');
+            
+            urlInput.value = '';
+            resultDiv.innerHTML = '';
+            urlInput.focus();
         }
 
         function showError(message) {
